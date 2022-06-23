@@ -1,0 +1,7 @@
+﻿Language: Cpp
+BasedOnStyle: Microsoft
+IndentWidth: '2'
+UseTab: Never
+BreakBeforeBraces: Allman
+PointerAlignment: Right
+AlignAfterOpenBracket: DontAlign
