@@ -9,6 +9,8 @@
 UCLASS()
 class SKELETONARENA_API ASAGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
-	
+  GENERATED_BODY()
+
+public:
+  ASAGameModeBase();
 };
