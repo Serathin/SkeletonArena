@@ -19,6 +19,8 @@ public:
 
   UFUNCTION(BlueprintCallable)
   bool IsRunning() const;
+  UFUNCTION(BlueprintCallable)
+  float GetDirection() const;
 
 protected:
   // Called when the game starts or when spawned

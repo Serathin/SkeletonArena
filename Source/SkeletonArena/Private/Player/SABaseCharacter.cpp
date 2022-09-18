@@ -3,6 +3,10 @@
 
 #include "SABaseCharacter.h"
 
+#include <Components/InputComponent.h>
+#include <Math/UnrealMath.h>
+
+#include "Math/UnrealMathUtility.h"
 #include "SAMovementComponent.h"
 
 // Sets default values
@@ -31,6 +35,18 @@ Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (Charact
 bool ASABaseCharacter::IsRunning() const
 {
   return bIsForwardMoving && bLShiftPressed && !GetVelocity().IsZero();
+}
+
+float ASABaseCharacter::GetDirection() const
+{
+  if (GetVelocity().IsZero()) return 0.f;
+  FVector const forward_vector = GetActorForwardVector();
+  FVector const velocity = GetVelocity().GetSafeNormal();
+  FVector const cross_product = FVector::CrossProduct(forward_vector, velocity);
+  float const dot_product = FVector::DotProduct(forward_vector, velocity);
+  float const angle = FMath::RadiansToDegrees(FMath::Acos(dot_product));
+  
+  return cross_product.IsZero() ? angle : angle * FMath::Sign(cross_product.Z);
 }
 
 
@@ -64,11 +80,13 @@ void ASABaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputCom
 void ASABaseCharacter::MoveForward(float AxisValue)
 {
   bIsForwardMoving = AxisValue > 0.f;
+  if (AxisValue == 0.f) return;
   AddMovementInput(GetActorForwardVector(), AxisValue);
 }
 
 void ASABaseCharacter::MoveRight(float AxisValue)
 {
+  if (AxisValue == 0.f) return;
   AddMovementInput(GetActorRightVector(), AxisValue);
 }
 
