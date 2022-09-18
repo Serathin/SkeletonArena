@@ -2,6 +2,7 @@
 
 
 #include "Components/SAHealthComponent.h"
+#include <GameFramework/Actor.h>
 
 USAHealthComponent::USAHealthComponent()
 :
@@ -16,4 +17,11 @@ void USAHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	health_ = max_health_;
+
+	if (AActor *owner = GetOwner()) owner->OnTakeAnyDamage.AddDynamic(this, &USAHealthComponent::OnTakeAnyDamage);
+}
+
+void USAHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	health_ = FMath::Clamp(health_ - Damage, 0.f, max_health_);
 }

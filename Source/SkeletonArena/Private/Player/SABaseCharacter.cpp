@@ -72,6 +72,8 @@ void ASABaseCharacter::Tick(float DeltaTime)
 
   float const health = health_component_->GetHealth();
   health_render_component_->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), health)));
+
+  TakeDamage(0.1f, FDamageEvent(), Controller, this);
 }
 
 // Called to bind functionality to input

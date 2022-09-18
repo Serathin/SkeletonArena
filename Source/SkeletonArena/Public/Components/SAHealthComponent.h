@@ -26,5 +26,8 @@ protected:
 	float max_health_;
 
 private:
+	UFUNCTION()
+  	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
 	float health_;
 };

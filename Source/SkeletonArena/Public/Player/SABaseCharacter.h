@@ -22,6 +22,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   bool IsRunning() const;
+
   UFUNCTION(BlueprintCallable)
   float GetDirection() const;
 
