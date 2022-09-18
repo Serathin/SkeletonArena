@@ -8,6 +8,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SABaseCharacter.generated.h"
 
+class USAHealthComponent;
+class UTextRenderComponent;
+
 UCLASS()
 class SKELETONARENA_API ASABaseCharacter : public ACharacter
 {
@@ -27,16 +30,22 @@ protected:
   virtual void BeginPlay() override;
 
   UPROPERTY(VisibleAnywhere, Category = Components)
-  USpringArmComponent *SpringArmComponent;
+  USpringArmComponent *spring_arm_component_;
 
   UPROPERTY(VisibleAnywhere, Category = Components)
-  UCameraComponent *CameraComponent;
+  UCameraComponent *camera_component_;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Components)
+  USAHealthComponent *health_component_;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Components)
+  UTextRenderComponent *health_render_component_;
 
   UPROPERTY(BlueprintReadOnly)
-  bool bLShiftPressed;
+  bool lshift_pressed_;
 
   UPROPERTY(BlueprintReadOnly)
-  bool bIsForwardMoving;
+  bool is_forward_moving_;
 
 public:
   // Called every frame
