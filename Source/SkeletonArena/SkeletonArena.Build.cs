@@ -15,7 +15,8 @@ public class SkeletonArena : ModuleRules
 		PublicIncludePaths.AddRange(new string[]
 		{
 			"SkeletonArena/Public/Player",
-			"SkeletonArena/Public/Components"
+			"SkeletonArena/Public/Components",
+			"SkeletonArena/Public/Dev"
 		});
 
 		// Uncomment if you are using Slate UI
