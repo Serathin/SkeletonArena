@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <GameFramework/DamageType.h>
 #include "SARadialDamagingActor.generated.h"
 
 UCLASS()
@@ -29,6 +30,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool damage_for_distance_;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf <UDamageType> damage_type_;
 
 protected:
 	// Called when the game starts or when spawned

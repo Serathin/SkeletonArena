@@ -19,7 +19,7 @@ sphere_radius_(300.f)
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	scene_component_ = CreateDefaultSubobject <USceneComponent>("Scene Component");
+	scene_component_ = CreateDefaultSubobject <USceneComponent> ("Scene Component");
 	SetRootComponent(scene_component_);
 }
 
@@ -36,6 +36,6 @@ void ASARadialDamagingActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), sphere_radius_, 24, sphere_color_);
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), damage_, GetActorLocation(), sphere_radius_, nullptr, {}, this, nullptr, !damage_for_distance_);
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), damage_, GetActorLocation(), sphere_radius_, damage_type_, {}, this, nullptr, !damage_for_distance_);
 }
 
