@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "SAHealthComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SKELETONARENA_API USAHealthComponent : public UActorComponent
@@ -17,6 +19,10 @@ public:
 	USAHealthComponent();
 
 	float GetHealth() const { return health_; }
+	bool IsDead() const { return health_ <= 0.f; }
+
+	FOnDeath on_death_;
+	FOnHealthChanged on_health_changed_;
 
 protected:
 	// Called when the game starts

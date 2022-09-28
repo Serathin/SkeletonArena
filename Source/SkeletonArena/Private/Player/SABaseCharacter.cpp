@@ -5,6 +5,7 @@
 
 #include <Components/InputComponent.h>
 #include <Components/TextRenderComponent.h>
+#include <Animation/AnimMontage.h>
 
 #include "Math/UnrealMathUtility.h"
 #include "SAMovementComponent.h"
@@ -63,15 +64,17 @@ void ASABaseCharacter::BeginPlay()
 
   check(health_component_);
   check(health_render_component_);
+  check(GetCharacterMovement());
+
+  OnHealthChanged(health_component_->GetHealth());
+  health_component_->on_health_changed_.AddUObject(this, &ASABaseCharacter::OnHealthChanged);
+  health_component_->on_death_.AddUObject(this, &ASABaseCharacter::OnDeath);
 }
 
 // Called every frame
 void ASABaseCharacter::Tick(float DeltaTime)
 {
   Super::Tick(DeltaTime);
-
-  float const health = health_component_->GetHealth();
-  health_render_component_->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), health)));
 }
 
 // Called to bind functionality to input
@@ -110,4 +113,18 @@ void ASABaseCharacter::StartRunning()
 void ASABaseCharacter::StopRunning()
 {
   lshift_pressed_ = false;
+}
+
+void ASABaseCharacter::OnHealthChanged(float health)
+{
+  health_render_component_->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), health)));
+}
+
+void ASABaseCharacter::OnDeath()
+{
+  PlayAnimMontage(death_anim_montage_);
+
+  GetCharacterMovement()->DisableMovement();
+
+  SetLifeSpan(5.f);
 }

@@ -20,22 +20,15 @@ void USAHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	health_ = max_health_;
+	on_health_changed_.Broadcast(health_);
 
 	if (AActor *owner = GetOwner()) owner->OnTakeAnyDamage.AddDynamic(this, &USAHealthComponent::OnTakeAnyDamage);
 }
 
 void USAHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (Damage < 0.f || IsDead()) return;
 	health_ = FMath::Clamp(health_ - Damage, 0.f, max_health_);
-	if (DamageType)
-	{
-		if (DamageType->IsA <USAPoisonDamageType> ())
-		{
-			UE_LOG(LogTemp, Log, TEXT("Poison"));
-		}
-		else if (DamageType->IsA <USABleedingDamageType> ())
-		{
-			UE_LOG(LogTemp, Log, TEXT("Bleeding"));
-		}
-	}
+	on_health_changed_.Broadcast(health_);
+	if (health_ <= 0.f) on_death_.Broadcast();
 }

@@ -10,6 +10,7 @@
 
 class USAHealthComponent;
 class UTextRenderComponent;
+class UAnimMontage;
 
 UCLASS()
 class SKELETONARENA_API ASABaseCharacter : public ACharacter
@@ -42,6 +43,9 @@ protected:
   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Components)
   UTextRenderComponent *health_render_component_;
 
+  UPROPERTY(EditDefaultsOnly)
+  UAnimMontage *death_anim_montage_;
+
   UPROPERTY(BlueprintReadOnly)
   bool lshift_pressed_;
 
@@ -61,4 +65,7 @@ private:
 
   void StartRunning();
   void StopRunning();
+
+  void OnHealthChanged(float health);
+  void OnDeath();
 };
