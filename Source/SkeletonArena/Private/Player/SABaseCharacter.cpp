@@ -6,6 +6,7 @@
 #include <Components/InputComponent.h>
 #include <Components/TextRenderComponent.h>
 #include <Animation/AnimMontage.h>
+#include <GameFramework/Controller.h>
 
 #include "Math/UnrealMathUtility.h"
 #include "SAMovementComponent.h"
@@ -125,6 +126,7 @@ void ASABaseCharacter::OnDeath()
   PlayAnimMontage(death_anim_montage_);
 
   GetCharacterMovement()->DisableMovement();
-
   SetLifeSpan(5.f);
+
+  if (Controller) Controller->ChangeState(NAME_Spectating);
 }
