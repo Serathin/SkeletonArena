@@ -18,6 +18,8 @@ ASABaseCharacter::ASABaseCharacter(FObjectInitializer const &ObjectInitializer)
 Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (CharacterMovementComponentName))
 , lshift_pressed_(false)
 , is_forward_moving_(false)
+, landed_damage_min_max_(10.f, 100.f)
+, landed_damage_velocity_min_max_(800.f, 1200.f)
 {
   // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
@@ -70,6 +72,17 @@ void ASABaseCharacter::BeginPlay()
   OnHealthChanged(health_component_->GetHealth());
   health_component_->on_health_changed_.AddUObject(this, &ASABaseCharacter::OnHealthChanged);
   health_component_->on_death_.AddUObject(this, &ASABaseCharacter::OnDeath);
+
+  LandedDelegate.AddDynamic(this, &ASABaseCharacter::DamageOnLanded);
+}
+
+void ASABaseCharacter::DamageOnLanded(FHitResult const & /*hit_result*/)
+{
+  float const z_fall_velocity = -GetCharacterMovement()->Velocity.Z;
+  if (z_fall_velocity < landed_damage_velocity_min_max_.X) return;
+
+  float const damage = FMath::GetMappedRangeValueClamped(landed_damage_velocity_min_max_, landed_damage_min_max_, z_fall_velocity);
+  TakeDamage(damage, {}, nullptr, nullptr);
 }
 
 // Called every frame

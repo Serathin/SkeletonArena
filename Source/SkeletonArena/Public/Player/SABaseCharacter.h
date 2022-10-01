@@ -31,6 +31,9 @@ protected:
   // Called when the game starts or when spawned
   virtual void BeginPlay() override;
 
+  UFUNCTION()
+  void DamageOnLanded(FHitResult const &hit_result);
+
   UPROPERTY(VisibleAnywhere, Category = Components)
   USpringArmComponent *spring_arm_component_;
 
@@ -51,6 +54,12 @@ protected:
 
   UPROPERTY(BlueprintReadOnly)
   bool is_forward_moving_;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = LandedDamage)
+  FVector2D landed_damage_min_max_;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = LandedDamage)
+  FVector2D landed_damage_velocity_min_max_;
 
 public:
   // Called every frame
