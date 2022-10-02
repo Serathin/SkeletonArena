@@ -20,6 +20,7 @@ Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (Charact
 , is_forward_moving_(false)
 , landed_damage_min_max_(10.f, 100.f)
 , landed_damage_velocity_min_max_(800.f, 1200.f)
+, on_death_life_span_(5.f)
 {
   // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
@@ -78,7 +79,7 @@ void ASABaseCharacter::BeginPlay()
 
 void ASABaseCharacter::DamageOnLanded(FHitResult const & /*hit_result*/)
 {
-  float const z_fall_velocity = -GetCharacterMovement()->Velocity.Z;
+  float const z_fall_velocity = -GetVelocity().Z;
   if (z_fall_velocity < landed_damage_velocity_min_max_.X) return;
 
   float const damage = FMath::GetMappedRangeValueClamped(landed_damage_velocity_min_max_, landed_damage_min_max_, z_fall_velocity);
@@ -139,7 +140,7 @@ void ASABaseCharacter::OnDeath()
   PlayAnimMontage(death_anim_montage_);
 
   GetCharacterMovement()->DisableMovement();
-  SetLifeSpan(5.f);
+  SetLifeSpan(on_death_life_span_);
 
   if (Controller) Controller->ChangeState(NAME_Spectating);
 }

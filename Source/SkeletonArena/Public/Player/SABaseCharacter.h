@@ -61,6 +61,9 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = LandedDamage)
   FVector2D landed_damage_velocity_min_max_;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+  float on_death_life_span_;
+
 public:
   // Called every frame
   virtual void Tick(float DeltaTime) override;
