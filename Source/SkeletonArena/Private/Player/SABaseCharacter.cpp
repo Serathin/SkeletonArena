@@ -5,12 +5,15 @@
 
 #include <Components/InputComponent.h>
 #include <Components/TextRenderComponent.h>
+#include <Components/SkeletalMeshComponent.h>
 #include <Animation/AnimMontage.h>
+#include <Engine/EngineTypes.h>
 #include <GameFramework/Controller.h>
 
 #include "Math/UnrealMathUtility.h"
 #include "SAMovementComponent.h"
 #include "SAHealthComponent.h"
+#include "SABaseWeapon.h"
 
 // Sets default values
 ASABaseCharacter::ASABaseCharacter(FObjectInitializer const &ObjectInitializer)
@@ -75,6 +78,8 @@ void ASABaseCharacter::BeginPlay()
   health_component_->on_death_.AddUObject(this, &ASABaseCharacter::OnDeath);
 
   LandedDelegate.AddDynamic(this, &ASABaseCharacter::DamageOnLanded);
+
+  SpawnWeapon();
 }
 
 void ASABaseCharacter::DamageOnLanded(FHitResult const & /*hit_result*/)
@@ -143,4 +148,17 @@ void ASABaseCharacter::OnDeath()
   SetLifeSpan(on_death_life_span_);
 
   if (Controller) Controller->ChangeState(NAME_Spectating);
+}
+
+void ASABaseCharacter::SpawnWeapon()
+{
+  if (GetWorld())
+  {
+    auto const weapon = GetWorld()->SpawnActor <ASABaseWeapon> (weapon_class_);
+    if (weapon)
+    {
+      FAttachmentTransformRules attachment_transform_rules(EAttachmentRule::SnapToTarget, false);
+      weapon->AttachToComponent(GetMesh(), attachment_transform_rules, "hand_rSocket");
+    }
+  }
 }

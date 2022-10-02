@@ -16,6 +16,7 @@ public class SkeletonArena : ModuleRules
 		{
 			"SkeletonArena/Public/Player",
 			"SkeletonArena/Public/Components",
+			"SkeletonArena/Public/Weapon",
 			"SkeletonArena/Public/Dev"
 		});
 
