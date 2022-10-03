@@ -31,6 +31,7 @@ Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (Charact
   spring_arm_component_ = CreateDefaultSubobject <USpringArmComponent> ("Spring Arm Component");
   spring_arm_component_->SetupAttachment(GetRootComponent());
   spring_arm_component_->bUsePawnControlRotation = true;
+  spring_arm_component_->SocketOffset = FVector(0.f, 100.f, 80.f);
 
   camera_component_ = CreateDefaultSubobject <UCameraComponent> ("Camera Component");
   camera_component_->SetupAttachment(spring_arm_component_);
@@ -39,6 +40,7 @@ Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (Charact
 
   health_render_component_ = CreateDefaultSubobject <UTextRenderComponent> ("Health Render Component");
   health_render_component_->SetupAttachment(GetRootComponent());
+  health_render_component_->SetOwnerNoSee(true);
 
   if (USAMovementComponent *MovementComponent = dynamic_cast <USAMovementComponent *> (GetCharacterMovement()))
   {
