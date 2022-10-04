@@ -7,13 +7,14 @@
 #include <Components/TextRenderComponent.h>
 #include <Components/SkeletalMeshComponent.h>
 #include <Animation/AnimMontage.h>
+#include <Engine/EngineBaseTypes.h>
 #include <Engine/EngineTypes.h>
 #include <GameFramework/Controller.h>
 
 #include "Math/UnrealMathUtility.h"
 #include "SAMovementComponent.h"
 #include "SAHealthComponent.h"
-#include "SABaseWeapon.h"
+#include "SAWeaponComponent.h"
 
 // Sets default values
 ASABaseCharacter::ASABaseCharacter(FObjectInitializer const &ObjectInitializer)
@@ -41,6 +42,8 @@ Super(ObjectInitializer.SetDefaultSubobjectClass <USAMovementComponent> (Charact
   health_render_component_ = CreateDefaultSubobject <UTextRenderComponent> ("Health Render Component");
   health_render_component_->SetupAttachment(GetRootComponent());
   health_render_component_->SetOwnerNoSee(true);
+
+  weapon_component_ = CreateDefaultSubobject <USAWeaponComponent> ("Weapon Component");
 
   if (USAMovementComponent *MovementComponent = dynamic_cast <USAMovementComponent *> (GetCharacterMovement()))
   {
@@ -80,8 +83,6 @@ void ASABaseCharacter::BeginPlay()
   health_component_->on_death_.AddUObject(this, &ASABaseCharacter::OnDeath);
 
   LandedDelegate.AddDynamic(this, &ASABaseCharacter::DamageOnLanded);
-
-  SpawnWeapon();
 }
 
 void ASABaseCharacter::DamageOnLanded(FHitResult const & /*hit_result*/)
@@ -112,6 +113,9 @@ void ASABaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputCom
   PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASABaseCharacter::Jump);
   PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASABaseCharacter::StartRunning);
   PlayerInputComponent->BindAction("Run", IE_Released, this, &ASABaseCharacter::StopRunning);
+
+  check(weapon_component_);
+  PlayerInputComponent->BindAction("Fire", IE_Pressed, weapon_component_, &USAWeaponComponent::Fire);
 }
 
 void ASABaseCharacter::MoveForward(float AxisValue)
@@ -150,17 +154,4 @@ void ASABaseCharacter::OnDeath()
   SetLifeSpan(on_death_life_span_);
 
   if (Controller) Controller->ChangeState(NAME_Spectating);
-}
-
-void ASABaseCharacter::SpawnWeapon()
-{
-  if (GetWorld())
-  {
-    auto const weapon = GetWorld()->SpawnActor <ASABaseWeapon> (weapon_class_);
-    if (weapon)
-    {
-      FAttachmentTransformRules attachment_transform_rules(EAttachmentRule::SnapToTarget, false);
-      weapon->AttachToComponent(GetMesh(), attachment_transform_rules, "hand_rSocket");
-    }
-  }
 }

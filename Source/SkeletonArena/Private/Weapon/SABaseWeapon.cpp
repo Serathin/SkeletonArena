@@ -13,8 +13,12 @@ ASABaseWeapon::ASABaseWeapon()
 	SetRootComponent(skeletal_mesh_component_);
 }
 
+void ASABaseWeapon::Fire()
+{
+  UE_LOG(LogTemp, Log, TEXT("F"));
+}
+
 void ASABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }

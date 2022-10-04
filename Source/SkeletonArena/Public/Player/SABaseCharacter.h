@@ -11,7 +11,7 @@
 class USAHealthComponent;
 class UTextRenderComponent;
 class UAnimMontage;
-class ASABaseWeapon;
+class USAWeaponComponent;
 
 UCLASS()
 class SKELETONARENA_API ASABaseCharacter : public ACharacter
@@ -47,6 +47,9 @@ protected:
   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Components)
   UTextRenderComponent *health_render_component_;
 
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Components)
+  USAWeaponComponent *weapon_component_;
+
   UPROPERTY(EditDefaultsOnly)
   UAnimMontage *death_anim_montage_;
 
@@ -65,9 +68,6 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
   float on_death_life_span_;
 
-  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-  TSubclassOf <ASABaseWeapon> weapon_class_;
-
 public:
   // Called every frame
   virtual void Tick(float DeltaTime) override;
@@ -84,6 +84,4 @@ private:
 
   void OnHealthChanged(float health);
   void OnDeath();
-
-  void SpawnWeapon();
 };

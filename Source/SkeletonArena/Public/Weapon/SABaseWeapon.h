@@ -16,6 +16,8 @@ class SKELETONARENA_API ASABaseWeapon : public AActor
 public:
 	ASABaseWeapon();
 
+	virtual void Fire();
+
 protected:
 	virtual void BeginPlay() override;
 
