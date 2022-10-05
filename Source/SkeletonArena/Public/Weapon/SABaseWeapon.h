@@ -23,4 +23,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent *skeletal_mesh_component_;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FName arrow_socket_name_;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float line_trace_length_;
+
+private:
+	void MakeShot();
 };
