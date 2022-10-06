@@ -37,11 +37,12 @@ void USAWeaponComponent::SpawnWeapon()
   {
     if (auto owner = Cast <ACharacter> (GetOwner()))
     {
-	  if ((current_weapon_ = GetWorld()->SpawnActor <ASABaseWeapon> (weapon_class_)) != nullptr)
-	  {
-		FAttachmentTransformRules attachment_transform_rules(EAttachmentRule::SnapToTarget, false);
-      	current_weapon_->AttachToComponent(owner->GetMesh(), attachment_transform_rules, weapon_socket_name_);
-	  }
+	    if ((current_weapon_ = GetWorld()->SpawnActor <ASABaseWeapon> (weapon_class_)) != nullptr)
+	    {
+		    FAttachmentTransformRules attachment_transform_rules(EAttachmentRule::SnapToTarget, false);
+        current_weapon_->AttachToComponent(owner->GetMesh(), attachment_transform_rules, weapon_socket_name_);
+        current_weapon_->SetOwner(owner);
+	    }
     }
   }
 }
