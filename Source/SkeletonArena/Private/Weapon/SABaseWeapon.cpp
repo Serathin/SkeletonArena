@@ -49,13 +49,18 @@ void ASABaseWeapon::MakeShot()
 
 	FTransform const socket_transform = skeletal_mesh_component_->GetSocketTransform(arrow_socket_name_);
 	FVector const start_pos = socket_transform.GetLocation();
+	FVector const weapon_direction = socket_transform.GetRotation().GetUpVector();
 
 	FCollisionQueryParams collision_query_params;
 	collision_query_params.AddIgnoredActor(player);
 
 	FHitResult hit_result;
 	GetWorld()->LineTraceSingleByChannel(hit_result, player_location, end_pos, ECollisionChannel::ECC_Visibility, collision_query_params);
-	if (hit_result.bBlockingHit) end_pos = hit_result.ImpactPoint;
+	if (hit_result.bBlockingHit)
+	{
+		FVector const weapon_path = (hit_result.ImpactPoint  - start_pos).GetSafeNormal();
+		if (FVector::DotProduct(weapon_path, weapon_direction) > 0.f) end_pos = hit_result.ImpactPoint;
+	}
 
 	GetWorld()->LineTraceSingleByChannel(hit_result, start_pos, end_pos, ECollisionChannel::ECC_Visibility, collision_query_params);
 	if (hit_result.bBlockingHit)
