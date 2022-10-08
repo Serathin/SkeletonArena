@@ -30,6 +30,13 @@ void USAWeaponComponent::BeginPlay()
   SpawnWeapon();
 }
 
+void USAWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+  Super::EndPlay(EndPlayReason);
+
+  if (current_weapon_) current_weapon_->Destroy();
+}
+
 
 void USAWeaponComponent::SpawnWeapon()
 {

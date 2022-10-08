@@ -12,6 +12,7 @@ ASABaseWeapon::ASABaseWeapon()
 :
 arrow_socket_name_("arrow1")
 , line_trace_length_(1500.f)
+, damage_(10.f)
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -67,6 +68,11 @@ void ASABaseWeapon::MakeShot()
 	{
 		DrawDebugLine(GetWorld(), start_pos, hit_result.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
 		DrawDebugSphere(GetWorld(), hit_result.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+
+		if (auto * const enemy = Cast <ACharacter> (hit_result.GetActor()))
+		{
+			enemy->TakeDamage(damage_, {}, controller, this);
+		} 
 	}
 	else DrawDebugLine(GetWorld(), start_pos, end_pos, FColor::Red, false, 3.f, 0, 3.f);
 }

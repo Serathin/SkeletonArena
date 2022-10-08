@@ -6,6 +6,7 @@
 #include <Components/InputComponent.h>
 #include <Components/TextRenderComponent.h>
 #include <Components/SkeletalMeshComponent.h>
+#include <Components/CapsuleComponent.h>
 #include <Animation/AnimMontage.h>
 #include <Engine/EngineBaseTypes.h>
 #include <Engine/EngineTypes.h>
@@ -151,6 +152,8 @@ void ASABaseCharacter::OnDeath()
   PlayAnimMontage(death_anim_montage_);
 
   GetCharacterMovement()->DisableMovement();
+  GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+  
   SetLifeSpan(on_death_life_span_);
 
   if (Controller) Controller->ChangeState(NAME_Spectating);

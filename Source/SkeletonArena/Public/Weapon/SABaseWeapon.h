@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float line_trace_length_;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float damage_;
+
 private:
 	void MakeShot();
 };
